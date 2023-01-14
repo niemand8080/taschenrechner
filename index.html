@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="Viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taschenrechner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    
+   <style>
+      :root {
+        --resultArea-color: rgb(50, 50, 50);
+        --resultArea2-color: white;
+        --td-color: rgb(20, 20, 20);
+        --table-color: rgb(35, 35, 35);
+        --td-background-hover-color:  rgb(40, 40, 40);
+        --blue-color: rgb(30, 30, 30);
+      }
+      .dark_mode{
+        --resultArea-color: white;
+        --resultArea2-color: rgb(50, 50, 50);
+        --td-color: rgb(235, 235, 235);
+        --table-color: rgb(220, 220, 220);
+        --td-background-hover-color:  rgb(215, 215, 215);
+        --blue-color: rgb(225, 225, 225);
+      }
+      #dark_mode_button {
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+      /* hochladen zu bingopyjama 
+      scp -r "/Users/ben/Library/Mobile Documents/com~apple~CloudDocs/Ben/taschenrechner/" ben@beetroot.bingopyjama.com:/var/www/html/ben
+      */
+      .unsichtbar {
+        background-color: transparent;
+      }
+      /* schriftart ändern */
+      body {
+       font-family: 'Bebas Neue', cursive;
+       margin: 0;
+       overflow: hidden;
+      }
+      /* table größe, hintergrund farbe und schrift farbbe ändern */
+      #tasten {
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 60vh;
+        background-color: var(--table-color);
+        color: var(--resultArea2-color);
+      }
+      #colortable {
+        transform-origin: top right;
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 5%;
+        height: 50px;
+        background-color: var(--table-color);
+        transform: scale(1);
+        transition: 0.5s;
+      }
+      #colortable:hover {
+        transform: scale(4);
+        transition: 0.5s;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      }
+      #yourcolor4 {
+        background-color: #ff0000;
+      }
+      #yourcolor4:hover {
+        cursor: pointer;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        transform: scale(1.03);
+        transition: 0.5s;
+      }
+      #yourcolor3 {
+        background-color:#0000ff
+      }
+      #yourcolor3:hover {
+        cursor: pointer;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        transform: scale(1.03);
+        transition: 0.5s;
+      }
+      #yourcolor2{
+        background-color: #00ff00;
+      }
+      #yourcolor2:hover {
+        cursor: pointer;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        transform: scale(1.03);
+        transition: 0.5s;
+      }
+      #yourcolor1:hover {
+        cursor: pointer;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        transform: scale(1.03);
+        transition: 0.5s;
+      }
+      #yourcolor1{
+        background-color: #ff0000;
+      }
+      .rgb:hover {
+        cursor: pointer;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        transform: scale(1.03);
+        transition: 0.5s;
+      }
+      .rgb{
+		    animation: yourcolor 10s linear;
+		    animation-iteration-count: infinite;
+      }
+      @keyframes yourcolor{
+		    100%,0%{
+		    	background-color: rgb(255,0,0);
+		    }
+		    8%{
+		    	background-color: rgb(255,127,0);
+		    }
+		    16%{
+		    	background-color: rgb(255,255,0);
+		    }
+		    25%{
+		    	background-color: rgb(127,255,0);
+		    }
+		    33%{
+		    	background-color: rgb(0,255,0);
+		    }
+		    41%{
+		    	background-color: rgb(0,255,127);
+		    }
+		    50%{
+		    	background-color: rgb(0,255,255);
+		    }
+		    58%{
+		    	background-color: rgb(0,127,255);
+		    }
+		    66%{
+		    	background-color: rgb(0,0,255);
+		    }
+		    75%{
+		    	background-color: rgb(127,0,255);
+		    }
+		    83%{
+		    	background-color: rgb(255,0,255);
+		    }
+		    91%{
+		    	background-color: rgb(255,0,127);
+		    }
+      }
+      /* farbe von td ändern, text position ändern, größe ändern */
+      td {
+        width: 14.286%;
+        text-align: center;
+        background-color: var(--td-color);
+        font-size: 50px;
+      }
+      /* td farbe ändern wenn mit maus drüber von 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ., DEL, AC, */
+      .hover:hover {
+        background-color: var(--td-background-hover-color);
+        cursor: pointer;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        transform: scale(1.03);
+        transition: 0.5s;
+      }
+      /* resultArea farbe, größe, schrift farbe,  */
+      #resultArea {
+        cursor: default;
+        width: 100%;
+        height: 20vh;
+        background-color: var(--resultArea-color);
+        color: var(--resultArea2-color);
+        font-size: 140px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-end;
+        padding: 24px;
+        box-sizing: border-box;
+      }      
+      
+      #resultArea2 {
+        cursor: default;
+        width: 100%;
+        height: 20vh;
+        background-color: var(--resultArea-color);
+        color: rgb(88, 88, 88);
+        font-size: 80px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-end;
+        padding: 24px;
+        box-sizing: border-box;
+      }
+      /* class blue hintergrundfarbe */
+      .blue {
+         background-color: var(--blue-color);
+      }
+      /* classe blue farbe ändern wenn mit maus drüber */
+      .blue:hover {
+        background-color: var(--td-background-hover-color);
+        cursor: pointer;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        transform: scale(1.03);
+        transition: 0.5s;
+      }
+      /* gleichzeichen hintergrund */
+      #result {
+         background-color: rgb(255, 0, 0);
+      }
+      /* gleichzeichen farbe wenn auf gleichzeichen */
+      #result:hover {
+        background-color: rgb(237, 64, 64);
+      }
+      #backgroundLoader {
+        /*background: url(loader.gif) no-repeat center center;*/
+        position:absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+        background-color: rgb(23, 23, 23);
+      }
+      .loader{
+        left: 100%;
+        margin-top: 20%;
+        position: relative;
+        display: inline-block;
+        width: 160px;
+        height: 160px;
+
+      }
+      .dot{
+        display: block;
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        top: 40%;
+        left: 50%;
+        border-radius: 5px;
+        background-color: #ff0000;
+        transform-origin: 10px 50px;
+        animation: rotate;
+        animation-iteration-count: infinite;
+        animation-duration: 1s;
+        box-shadow: 0 0 20px rgb(0, 0, 0,0.5);
+      }
+      @keyframes rotate{
+        from{
+            transform: rotateZ(0deg);
+        }
+        to{
+          transform: rotateZ(360deg);
+        }
+      }
+      .d2{
+        animation-delay: 0.1s;
+      }
+      .d3{
+        animation-delay: 0.2s;
+      }
+      .d4{
+        animation-delay: 0.3s;
+      }
+      .d5{
+        animation-delay: 0.4s;
+      }
+      .d6{
+        animation-delay: 0.5s;
+      }
+
+    </style>
+
+    <script>
+      //cookies
+      function getCookie(cname) {
+        let name = cname + "=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(';');
+        for(let i = 0; i <ca.length; i++) {
+          let c = ca[i];
+          while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+          }
+        }
+        return "";
+      }
+      function setCookie(cname, cvalue, exdays) {
+        const d = new Date();
+        d.setTime(d.getTime() + (exdays*24*60*60*1000));
+        let expires = "expires="+ d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+      }
+
+
+      const SCALESIZE=20;
+      const dark_mode_button = document.getElementById("dark_mode_button");
+      
+      function hochziffer(ziffer) {
+        const hochziffern="⁰¹²³⁴⁵⁶⁷⁸⁹";
+
+        return hochziffern.substring(ziffer,ziffer+1);
+      }
+
+
+      function wurzel() {
+        let containerHTML = document.getElementById('resultArea').innerHTML;
+          delereall();
+          delereLast2();
+          appendOperation('√(');
+          appendOperation(containerHTML);
+          appendOperation(')')
+      }
+      //dark/light mode an/aus
+      function darkModeButton() {
+        if (document.getElementById('dark_mode_img').src.match("mond.png")) {
+          document.getElementById('dark_mode_img').src = "sonne.png"; 
+        } else {
+          document.getElementById('dark_mode_img').src = "mond.png";
+        }
+        document.body.classList.toggle("dark_mode");
+      }
+      function changeYourColor3() {
+        changeColor(document.getElementById('yourcolor3').style.backgroundColor);
+      } 
+      function changeYourColor1() {
+        if (document.getElementById('resultArea').innerHTML.startsWith("#")) {
+          changeColor(document.getElementById('resultArea').innerHTML);
+        }
+      } 
+      function changeYourColor2() {
+        changeColor(document.getElementById('yourcolor2').style.backgroundColor);
+      } 
+      function changeYourColor4() {
+        changeColor(document.getElementById('yourcolor4').style.backgroundColor);
+      } 
+      function changeColor(color) {
+        setCookie("yourColor4",getCookie("yourColor3"), 5);
+        setCookie("yourColor3",getCookie("yourColor2"), 5);
+        setCookie("yourColor2",getCookie("yourColor1"), 5);
+
+        document.getElementById('yourcolor4').style.backgroundColor  = getCookie("yourColor4");
+        document.getElementById('yourcolor3').style.backgroundColor  = getCookie("yourColor3");
+        document.getElementById('yourcolor2').style.backgroundColor  = getCookie("yourColor2");
+
+        document.getElementById("result").classList.remove("rgb");
+        document.getElementById('result').style.backgroundColor = color;
+        document.getElementById('yourcolor1').style.backgroundColor = color;
+        setCookie("yourColor1", color, 5);
+      } 
+      function rgb() {
+        document.getElementById("result").classList.toggle("rgb");
+      }
+      /* verhindert markieren */
+      const disableselect = (e) => {
+  		return false;
+		  }
+		  document.onselectstart = disableselect;
+		  document.onmousedown = disableselect;
+      const ziffernHEX = ["9", "8", "7", "6", "5", "4", "3", "2", "1", "0", "a", "b", "c", "d", "e", "f", "#", "r", "g"]; 
+      const ziffern = ["9", "8", "7", "6", "5", "4", "3", "2", "1", "0"]; 
+      const operator = [" / "," * "," + "," - "];
+      const hoch = ["⁹", "⁸", "⁷", "⁶", "⁵", "⁴", "³", "²", "¹", "⁰"]; 
+      var answer = 0;
+
+      /* schreibt in die resultArea */
+      function appendOperation(operation){
+        let containerHTML = document.getElementById('resultArea').innerHTML;
+        // wenn eine 0 am anfang steht lösche sie wenn 9, 8, 7, 6 usw. als nächstes eingetragen wird
+        if (ziffernHEX.includes(String(operation)) && document.getElementById('resultArea').innerHTML == "0") {
+          document.getElementById('resultArea').innerHTML = operation;
+        } else {
+          // wenn ein ' ' am ende sthet kann kein +, -, * oder / eingetragen werden
+          if (operator.includes(operation) && document.getElementById('resultArea').innerHTML.endsWith(' ') ) {
+              // alert("mach nichts");
+          } else {
+            // wenn eine ( eingetragen wird wird davor ein * gesetzt
+            if (operation == "(" && ziffern.includes(containerHTML[containerHTML.length-1])) {
+                appendOperation('*');
+                appendOperation('(');
+            } else {
+              if (document.getElementById('resultArea').innerHTML.endsWith('^')) {
+                appendOperation3(hochziffer(operation));
+              }else{
+                if (/[⁰¹²³⁴⁵⁶⁷⁸⁹]$/.test(document.getElementById('resultArea').innerHTML) && ziffern.includes(operation)) {
+                  document.getElementById('resultArea').innerHTML += hochziffer(operation);
+                }else{
+                  document.getElementById('resultArea').innerHTML += operation;
+                }
+              }
+            }
+          }  
+        }
+        if (document.getElementById('resultArea').innerHTML.length > SCALESIZE) {
+          document.getElementById('resultArea').style.fontSize="100px";     
+        } 
+      }
+
+      function appendOperation2(operation) {
+        let containerHTML = document.getElementById('resultArea').innerHTML;
+        delereLast();
+        document.getElementById('resultArea').innerHTML += operation;
+        appendOperation(')')
+      }
+
+      function appendOperation3(operation) {
+        let containerHTML = document.getElementById('resultArea').innerHTML;
+        delereLast();
+        document.getElementById('resultArea').innerHTML += operation;
+      }
+
+      //gibt das letzte ergebnis in die resultArea ein
+      function ans() {
+        document.getElementById('resultArea').innerHTML += answer; 
+      }
+      //macht hex zu dec
+      function dec() {
+        let hexZhal = String(document.getElementById('resultArea').innerHTML); 
+        let nummer = parseInt(hexZhal, 16);
+        
+        if (new RegExp('[^0-9a-fA-F]')) {
+          document.getElementById('resultArea').innerHTML =  nummer;
+        }
+      }
+      //macht dec zu oct
+      function oct() {
+        document.getElementById('resultArea2').innerHTML = document.getElementById('resultArea').innerHTML;
+        document.getElementById('resultArea').innerHTML = Number(document.getElementById('resultArea').innerHTML).toString(8);
+      }
+      //macht dec zu hex
+      function hex() {
+        document.getElementById('resultArea2').innerHTML = document.getElementById('resultArea').innerHTML;
+        document.getElementById('resultArea').innerHTML = Number(document.getElementById('resultArea').innerHTML).toString(16);
+      }
+      //macht dec zu BIN
+      function bin() {
+        document.getElementById('resultArea2').innerHTML = document.getElementById('resultArea').innerHTML;
+        document.getElementById('resultArea').innerHTML = Number(document.getElementById('resultArea').innerHTML).toString(2);
+      }
+      // findet alle Priemzhalen bis zu der angegebenen Zahl
+      async function findPrimes() {
+        let containerHTML = document.getElementById('resultArea').innerHTML;
+
+        if (containerHTML > 40000) {
+          showloader();
+          await sleep(500);
+        }
+
+        document.getElementById('resultArea2').innerHTML = containerHTML;
+        delereall();
+
+        for (let i = 1; i <= containerHTML; i++) {
+          if (isPrime(i)) {
+            if (document.getElementById('resultArea').innerHTML != "0") {
+              appendOperation(". ");
+            }
+            appendOperation(Number(i));
+
+          }
+        }
+        hideloader();
+      }
+      
+      function findFactors(containerHTML) {
+          let factors = []; 
+          for (let i = 1; i <= containerHTML; i++) {
+            if (containerHTML % i === 0) {
+              factors.push(i);
+            }
+          }
+          return factors;
+        }
+
+        function isPrime(containerHTML) {
+          return findFactors(containerHTML).length === 2;
+        }
+      function theEval(v) {
+        //alert(v.replace("π",Math.PI));
+        v=v.replace(/π/g,Math.PI);
+        v=v.replace(/([⁰¹²³⁴⁵⁶⁷⁸⁹]+)/g,"**$1");
+        v=v.replace(/⁰/g,"0");
+        v=v.replace(/¹/g,"1");
+        v=v.replace(/²/g,"2");
+        v=v.replace(/³/g,"3");
+        v=v.replace(/⁴/g,"4");
+        v=v.replace(/⁵/g,"5");
+        v=v.replace(/⁶/g,"6");
+        v=v.replace(/⁷/g,"7");
+        v=v.replace(/⁸/g,"8");
+        v=v.replace(/⁹/g,"9");
+        v=v.replace(/LN/g,"Math.log");
+        v=v.replace(/LG10/g,"Math.log10");
+        v=v.replace(/√/g,"Math.sqrt");
+        v=v.replace(/\^/g,"**");
+        return answer=Math.floor(eval(v)*1000+0.5)/1000;
+      }
+      //schreibt pi und rechnet pi wenn kein operator gesetzt ist
+      function pi() {
+        let containerHTML = document.getElementById('resultArea').innerHTML;
+        if (document.getElementById('resultArea').innerHTML.startsWith(0)) {
+          delereLast2();
+          appendOperation('π');
+        } else {
+          if (document.getElementById('resultArea').innerHTML.endsWith(' ')) {
+            appendOperation('π');
+         } else {
+            document.getElementById('resultArea').innerHTML = containerHTML+' * π';
+            //document.getElementById('resultArea').innerHTML = theEval(containerHTML)*3.142;
+          }
+        }
+      }
+      // macht eine zufälige zahl
+      function randomNumber() {
+            document.getElementById('resultArea2').innerHTML = document.getElementById('resultArea').innerHTML;
+            document.getElementById('resultArea').innerHTML = Math.floor(Math.random() * 1000);
+      }
+      //rechnet mit natürlichem logarithm
+      function naturalLogarithm() {
+        let containerHTML = document.getElementById('resultArea').innerHTML;
+          delereall();
+          delereLast2();
+          appendOperation('LN(');
+          appendOperation(containerHTML);
+          appendOperation(')');
+      }
+      //rechnet mit dem dekadischen logarithmus
+      function dekadischerLogarithmus() {
+        let containerHTML = document.getElementById('resultArea').innerHTML;
+        delereall();
+          delereLast2();
+          appendOperation('LG10(');
+          appendOperation(containerHTML);
+          appendOperation(')');
+      }
+      /* rechnet das ergebnis aus dem was in der resultArea steht aus */ 
+      function calculatResult() {
+        let container = document.getElementById('resultArea');
+        let result = theEval(container.innerHTML);
+
+        if (container.innerHTML == "rgb") {
+          rgb();
+        }else{
+          document.getElementById('resultArea2').innerHTML = container.innerHTML;
+          container.innerHTML = result; 
+        }
+      }
+      /* löscht das zu lezt eingegebene zeichen bzw. die zulezt eingegebene zahl */
+      function delereLast() {
+        let container = document.getElementById('resultArea');
+        if (container.innerHTML.endsWith(' ')) {
+          container.innerHTML = container.innerHTML.slice(0,-3);  
+        } 
+        else {
+          container.innerHTML = container.innerHTML.slice(0,-1);
+          if (container.innerHTML.length == 0) {
+            appendOperation(0);
+          }
+        } 
+        if (document.getElementById('resultArea').innerHTML.length <= SCALESIZE) {
+          document.getElementById('resultArea').style.fontSize="140px";     
+        } 
+      }
+      function delereLast2() {
+        let container = document.getElementById('resultArea');
+        if (container.innerHTML.endsWith(' ')) {
+          container.innerHTML = container.innerHTML.slice(0,-3);  
+        } 
+        else {
+          container.innerHTML = container.innerHTML.slice(0,-1);
+        } 
+        if (document.getElementById('resultArea').innerHTML.length <= SCALESIZE) {
+          document.getElementById('resultArea').style.fontSize="140px";     
+        }
+      }
+      /* löscht alle zeichen und zahlen in der resultArea */
+      function delereall() {
+        document.getElementById('resultArea').innerHTML = "0";
+        document.getElementById('resultArea2').innerHTML = "";
+        document.getElementById('resultArea').style.fontSize="140px";
+      }
+
+      function keypressed (event) {
+        switch(event.key){
+          case "Enter": calculatResult(); 
+                        break;
+          case "1": appendOperation(1);
+                        break;
+          case "2": appendOperation(2);
+                        break;
+          case "3": appendOperation(3);
+                        break;
+          case "4": appendOperation(4);
+                        break;
+          case "5": appendOperation(5);
+                        break;
+          case "6": appendOperation(6);
+                        break;
+          case "7": appendOperation(7);
+                        break;
+          case "8": appendOperation(8);
+                        break;
+          case "9": appendOperation(9);
+                        break;
+          case "0": appendOperation(0);
+                        break;
+          case "+": appendOperation(' + ');
+                        break;
+          case "-": appendOperation(' - ');
+                        break;
+          case "/": appendOperation(' / ');
+                        break;
+          case "*": appendOperation(' * ');
+                        break;
+          case "Backspace": delereLast();
+                        break;  
+          case "Dead": appendOperation('^');
+                        break;    
+          case "(": appendOperation("(");
+                        break;
+          case ")": appendOperation(")");
+                        break;
+          case "a": appendOperation("a");
+                        break;
+          case "b": appendOperation("b");
+                        break;
+          case "c": appendOperation("c");
+                        break;
+          case "d": appendOperation("d");
+                        break;
+          case "e": appendOperation("e");
+                        break;
+          case "f": appendOperation("f");
+                        break;    
+          case "#": appendOperation("#");
+                        break;    
+          case "r": appendOperation("r");
+                        break;
+          case "g": appendOperation("g");
+                        break;    
+        }
+      }
+
+      function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+
+      function init() {
+        var random = Math.floor(Math.random() * 2000) + 1200;
+        var elem = document.querySelector('body');
+        elem.addEventListener("keydown", keypressed );
+
+        document.getElementById('result').style.backgroundColor = getCookie("yourColor1");
+        document.getElementById('yourcolor4').style.backgroundColor  = getCookie("yourColor4");
+        document.getElementById('yourcolor3').style.backgroundColor  = getCookie("yourColor3");
+        document.getElementById('yourcolor2').style.backgroundColor  = getCookie("yourColor2");
+        document.getElementById('yourcolor1').style.backgroundColor  = getCookie("yourColor1");
+        document.getElementById('resultArea2').innerHTML = "";
+        setTimeout('hideloader()', random);
+        setTimeout('hideBackgroundLoader()', random);
+      }     
+
+      function hideloader() {
+        document.getElementById('loader').style.display = "none";
+      }
+      function showloader() {
+        document.getElementById('loader').style.display = "block";
+      }
+      function hideBackgroundLoader() {
+        document.getElementById('backgroundLoader').style.display = "none";
+      }
+    </script>
+  </head>
+
+<body onload="init();">
+  <!-- Aufgabefelt = resultArea -->
+    <div id="resultArea2"></div>
+    <div id="resultArea">0</div>
+  <!-- Tabelle erstellen = <table> Text </tabele> --> 
+    <table id="tasten">
+      <!-- tr-Element repräsentiert eine Tabellenzeile. 
+        Die tr -Elemente umschließen die aus th und td-Elementen gebildeten Tabellenzeilen -->
+        <!-- td erzeugt eine Tabellenzelle, die Daten, Text oder Bilder aufnehmen kann -->
+
+      <tr>
+
+        <td onclick="bin()" class="hover">BIN</td>
+        <td onclick="dekadischerLogarithmus()" class="hover">LG</td>
+        <td onclick="naturalLogarithm()" class="hover">LN</td>
+        <td onclick="appendOperation('(')" class="hover">(</td>
+        <td onclick="appendOperation(')')" class="hover">)</td>
+        <td onclick="delereLast()" class="hover">DEL</td>
+        <td onclick="delereall()" class="hover">AC</td>
+          
+
+      </tr>
+
+      <tr>
+
+        <td onclick="oct()" class="hover">OCT</td>
+        <td onclick="pi()" class="hover">PI</td>
+        <td onclick="appendOperation('^')" class="hover">Xʸ</td>
+        <td onclick="appendOperation(7)" class="hover">7</td>
+        <td onclick="appendOperation(8)" class="hover">8</td>
+        <td onclick="appendOperation(9)" class="hover">9</td>
+        <td onclick="appendOperation(' / ')" class="blue" class="hover">/</td>
+        
+
+      </tr>
+
+      <tr>
+
+        <td onclick="hex()" class="hover">HEX</td>
+        <td onclick="wurzel()" class="hover">SQR</td>
+        <td onclick="appendOperation('³')" class="hover">X³</td>
+        <td onclick="appendOperation(4)" class="hover">4</td>
+        <td onclick="appendOperation(5)" class="hover">5</td>
+        <td onclick="appendOperation(6)" class="hover">6</td>
+        <td onclick="appendOperation(' * ')" class="blue" class="hover">*</td>
+        
+
+      </tr>
+
+      <tr>
+
+        <td onclick="dec()" class="hover">DEC</td>
+        <td onclick="randomNumber()" class="hover">RND</td>
+        <td onclick="appendOperation('²')" class="hover">X²</td>
+        <td onclick="appendOperation(1)" class="hover">1</td>
+        <td onclick="appendOperation(2)" class="hover">2</td>
+        <td onclick="appendOperation(3)" class="hover">3</td>
+        <td onclick="appendOperation(' + ')" class="blue" class="hover">+</td>
+        
+
+      </tr>
+      <tr>
+
+        <td onclick="findPrimes()" class="hover">PRIMES</td>
+        <td onclick="appendOperation('*10^')" class="hover">x10ᵡ</td>
+        <td onclick="ans()" class="hover">ANS</td>
+        <td onclick="appendOperation(0)" class="hover">0</td>
+        <td onclick="appendOperation('.')" class="hover">.</td>
+        <td onclick="calculatResult()" id="result" class="hover" class="rgb">=</td>
+        <td onclick="appendOperation(' - ')" class="blue" class="hover">-</td>
+        
+
+      </tr>
+
+    </table>
+    <table id="colortable">
+
+      <tr>
+
+        <td onclick="changeYourColor1()" id="yourcolor1"></td>
+        <td onclick="changeYourColor2()" id="yourcolor2"></td>
+
+      </tr>
+      <tr>
+
+        <td onclick="changeYourColor3()" id="yourcolor3"></td>
+        <td onclick="changeYourColor4()" id="yourcolor4"></td>
+
+      </tr>
+
+    </table>
+    <div onclick="darkModeButton()" id="dark_mode_button"><img src="sonne.png" id="dark_mode_img" height="60px"></div>
+    
+      <div id="backgroundLoader"></div>
+      <div id="loader">
+        <div class="dot d1"></div>
+        <div class="dot d2"></div>
+        <div class="dot d3"></div>
+        <div class="dot d4"></div>
+        <div class="dot d5"></div>
+        <div class="dot d6"></div>
+      </div>
+</body>
+</html>
