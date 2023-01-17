@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
-    
+    <!-- test -->
    <style>
       :root {
         --resultArea-color: rgb(50, 50, 50);
@@ -149,6 +149,49 @@
 		    	background-color: rgb(255,0,127);
 		    }
       }
+      .rgb2{
+		    animation: yourcolor2 10s linear;
+		    animation-iteration-count: infinite;
+      }
+      @keyframes yourcolor2{
+		    100%,0%{
+		    	color: rgb(255,0,0);
+		    }
+		    8%{
+		    	color: rgb(255,127,0);
+		    }
+		    16%{
+		    	color: rgb(255,255,0);
+		    }
+		    25%{
+		    	color: rgb(127,255,0);
+		    }
+		    33%{
+		    	color: rgb(0,255,0);
+		    }
+		    41%{
+		    	color: rgb(0,255,127);
+		    }
+		    50%{
+		    	color: rgb(0,255,255);
+		    }
+		    58%{
+		    	color: rgb(0,127,255);
+		    }
+		    66%{
+		    	color: rgb(0,0,255);
+		    }
+		    75%{
+		    	color: rgb(127,0,255);
+		    }
+		    83%{
+		    	color: rgb(255,0,255);
+		    }
+		    91%{
+		    	color: rgb(255,0,127);
+		    }
+      }
+    
       /* farbe von td ändern, text position ändern, größe ändern */
       td {
         width: 14.286%;
@@ -346,6 +389,7 @@
         document.getElementById('yourcolor3').style.backgroundColor  = getCookie("yourColor3");
         document.getElementById('yourcolor2').style.backgroundColor  = getCookie("yourColor2");
 
+        document.getElementById("resultArea").classList.remove("rgb2");
         document.getElementById("result").classList.remove("rgb");
         document.getElementById('result').style.backgroundColor = color;
         document.getElementById('yourcolor1').style.backgroundColor = color;
@@ -353,6 +397,7 @@
       } 
       function rgb() {
         document.getElementById("result").classList.toggle("rgb");
+        document.getElementById("resultArea").classList.toggle("rgb2");
       }
       /* verhindert markieren */
       const disableselect = (e) => {
